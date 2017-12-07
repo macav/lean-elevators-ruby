@@ -13,8 +13,18 @@ post '/decide' do
 
   # Do the calculations
   puts "Got: \n#{params_json}"
-  target_level = (params_json['elevator']['current_floor'] += 1) % 15
+  elevator = params_json['elevator']
+  if elevator['capacity'] > 3
+    target_level = most_requested_floor(elevator['target_floors'])
+  else
+    target_level = (elevator['current_floor'] += 1) % 15
+  end
 
   target_level.to_json
+end
+
+def most_requested_floor(floors)
+  counts = floors.inject(Hash.new(0)) { |h, v| h[v] += 1; h }
+  floors.max_by { |v| counts[v] }
 end
 
