@@ -12,7 +12,7 @@ post '/decide' do
 
   # Do the calculations
   puts "Got: \n#{params_json}"
-  target_level = rand(14)
+  target_level = rand(15)
 
   target_level.to_json
 end
