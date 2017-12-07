@@ -24,6 +24,12 @@ class Elevator
   end
 
   def next_floor_with_people
+    next_floor = nil
+    @target_floors.each do |tf|
+      panel = @floors[tf]['panel']
+      next_floor = tf if panel['up'] || panel['down']
+    end
+    return next_floor unless next_floor.nil?
     while 1
       next_floor = (@elevator['current_floor'] += 1) % 15
       panel = @floors[next_floor]['panel']
