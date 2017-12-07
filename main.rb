@@ -14,7 +14,7 @@ post '/decide' do
 
   # Do the calculations
   puts "Got: \n#{params_json}"
-  elevator = Elevator.new(params_json['elevator'])
+  elevator = Elevator.new(params_json['elevator'], params_json['floors'])
   target_level = elevator.floor
 
   target_level.to_json
