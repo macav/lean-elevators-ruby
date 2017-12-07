@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/reloader' if development?
+require_relative 'elevator'
 require 'json'
 
 get '/' do
@@ -13,22 +14,10 @@ post '/decide' do
 
   # Do the calculations
   puts "Got: \n#{params_json}"
-  elevator = params_json['elevator']
-  if get_capacity_of_elevator(elevator) < 3
-    target_level = most_requested_floor(elevator['target_floors'])
-  else
-    target_level = (elevator['current_floor'] += 1) % 15
-  end
+  elevator = Elevator.new(params_json['elevator'])
+  target_level = elevator.floor
 
   target_level.to_json
 end
 
-def get_capacity_of_elevator(elevator)
-  elevator['capacity'] - elevator['target_floors'].size
-end
-
-def most_requested_floor(floors)
-  counts = floors.inject(Hash.new(0)) { |h, v| h[v] += 1; h }
-  floors.max_by { |v| counts[v] }
-end
 
